@@ -1,7 +1,7 @@
+import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { Alert, AppState, StyleSheet } from 'react-native';
 import { Button, Input, Text, View, YStack } from 'tamagui';
-
 import { supabase } from '../lib/supabase';
 
 // Tells Supabase Auth to continuously refresh the session automatically if
@@ -21,25 +21,22 @@ export default function Auth() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   async function signInWithEmail() {
     setLoading(true);
-    const { error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
     
     setError(error?.message || '');
 
-    const { data: { session } } = await supabase.auth.getSession();
-
-    if (session) {
-      console.log("User is authenticated!");
-    } else {
-      console.log("User is NOT authenticated.");
+    if (data.session) {
+      // Redirect to the home page after successful sign-in
+      router.push('/home');
     }
 
-    if (error) Alert.alert(error.message);
     setLoading(false);
   }
 
@@ -60,7 +57,7 @@ export default function Auth() {
 
   return (
     <YStack  
-        width={200}
+        width={300}
         minHeight={250}
         overflow="hidden"
         gap="$2"
