@@ -25,22 +25,24 @@ export default function ShowDetails() {
 
     return (
         <YStack flex={1} alignItems="center" justifyContent="center" gap="$2" margin="$3" padding="$2">
-            <XStack gap={"$2"}>
+            <XStack gap={"$2"} margin={"$2"}>
                 <Image
-                    source={{
-                        uri: `https://vygupxxkyumsyvqotetf.supabase.co/storage/v1/object/public/pocket-patron-covers/covers/${show?.image_filename.slice(5,)}`,
-                    }}
+                    // source={{
+                        // uri: `https://vygupxxkyumsyvqotetf.supabase.co/storage/v1/object/public/pocket-patron-covers/covers/${show?.image_filename.slice(5,)}`,
+                        
+                    // }}
+                    source={require('../../assets/images/2025_Death_Becomes_Her.png')}
                     width={200}
                     height={300}
                 />
-                <YStack>
-                    <Text fontFamily="InstrumentSerif_400Regular" fontSize={50}>{show?.title}</Text>
+                <YStack maxWidth={"50%"}>
+                    <Text fontFamily="InstrumentSerif_400Regular" fontSize={30}>{show?.title}</Text>
                     <Text fontFamily="InstrumentSans_400Regular" fontSize={20}>{show?.season}</Text>
                     <Button>Add Viewing</Button>
                 </YStack>
             </XStack>
             <ScrollView>
-                <AddViewingSheet />
+                <AddViewingSheet show={show}/>
                 <Text>
                     {show?.description}
                 </Text>

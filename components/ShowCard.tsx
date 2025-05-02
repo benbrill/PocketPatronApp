@@ -17,14 +17,12 @@ export default function ShowCard({ show }: { show: Show }) {
     <Link href={`/shows/${show.show_id}`} asChild>
     <YStack width="33%" padding="$2">
         <Image
-        source={{
-            uri: `https://vygupxxkyumsyvqotetf.supabase.co/storage/v1/object/public/pocket-patron-covers/covers/${show.image_filename.slice(5,)}`,
-        }}
+        source={require('../assets/images/2025_Death_Becomes_Her.png')}
         width={100}
         height={150}
         />
         <Text fontSize="$1">{show.season}</Text>
-        <Text fontSize="$6" fontWeight="bold" fontFamily="InstrumentSans_400Regular">
+        <Text fontSize="$5" fontWeight="bold" fontFamily="InstrumentSans_400Regular">
         {show.title}
         </Text>
     </YStack>

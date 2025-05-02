@@ -10,7 +10,7 @@ export default function DisplayShows() {
 
   useEffect(() => {
     async function fetchShows() {
-      const { data, error } = await supabase.from('shows').select('show_id, title, description, season, image_filename').order('season', { ascending: false });
+      const { data, error } = await supabase.from('shows').select('show_id, title, description, season, image_filename').order('season', { ascending: false }).limit(12);
       if (error) {
         console.error('Error fetching shows:', error);
       } else {
