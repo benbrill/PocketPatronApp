@@ -31,7 +31,7 @@ export default function ShowDetails() {
                         // uri: `https://vygupxxkyumsyvqotetf.supabase.co/storage/v1/object/public/pocket-patron-covers/covers/${show?.image_filename.slice(5,)}`,
                         
                     // }}
-                    source={require('../../assets/images/2025_Death_Becomes_Her.png')}
+                    source={require('../../../assets/images/2025_Death_Becomes_Her.png')}
                     width={200}
                     height={300}
                 />

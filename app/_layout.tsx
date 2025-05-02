@@ -1,3 +1,4 @@
+import { AuthProvider } from "@/components/ctx";
 import { InstrumentSans_400Regular, InstrumentSans_700Bold } from "@expo-google-fonts/instrument-sans";
 import { InstrumentSerif_400Regular } from "@expo-google-fonts/instrument-serif";
 import { TamaguiProvider } from "@tamagui/core";
@@ -33,7 +34,9 @@ function RootLayoutNav() {
   return (
     <TamaguiProvider config={config} defaultTheme={colorScheme as any}>
       <PortalProvider>
-        <Slot /> 
+        <AuthProvider>
+          <Slot /> 
+        </AuthProvider>
       </PortalProvider>
     </TamaguiProvider>
   );

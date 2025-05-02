@@ -16,13 +16,12 @@ AppState.addEventListener('change', (state) => {
   }
 });
 
-export default function Auth() {
+export default function Auth(reason: { reason: string | string[] }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-
   async function signInWithEmail() {
     setLoading(true);
     const { data, error } = await supabase.auth.signInWithPassword({
@@ -55,6 +54,7 @@ export default function Auth() {
     setLoading(false);
   }
 
+
   return (
     <YStack  
         width={300}
@@ -83,6 +83,9 @@ export default function Auth() {
       </View>
       <View>
         {error ? <Text style={{ color: 'red' }}>{error}</Text> : null}
+      </View>
+      <View>
+        {reason.reason ? <Text style={{ color: 'red' }}>{reason.reason}</Text> : null}
       </View>
       <View style={[styles.verticallySpaced, styles.mt20]}>
         <Button disabled={loading} onPress={() => signInWithEmail()} > Sign In </Button>
