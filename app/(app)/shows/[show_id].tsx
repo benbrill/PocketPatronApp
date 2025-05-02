@@ -1,6 +1,6 @@
 import AddViewingSheet from '@/components/ShowDetails';
 import { supabase } from '@/lib/supabase';
-import { useLocalSearchParams } from 'expo-router';
+import { Link, useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Button, Image, ScrollView, Text, XStack, YStack } from 'tamagui';
 
@@ -31,14 +31,16 @@ export default function ShowDetails() {
                         // uri: `https://vygupxxkyumsyvqotetf.supabase.co/storage/v1/object/public/pocket-patron-covers/covers/${show?.image_filename.slice(5,)}`,
                         
                     // }}
-                    source={require('../../../assets/images/2025_Death_Becomes_Her.png')}
+                    source={require('@/assets/images/2025_Death_Becomes_Her.png')}
                     width={200}
                     height={300}
                 />
                 <YStack maxWidth={"50%"}>
                     <Text fontFamily="InstrumentSerif_400Regular" fontSize={30}>{show?.title}</Text>
                     <Text fontFamily="InstrumentSans_400Regular" fontSize={20}>{show?.season}</Text>
-                    <Button>Add Viewing</Button>
+                    <Link href={`/comparison/${show_id}`}>
+                        <Button>Compare</Button>
+                    </Link>
                 </YStack>
             </XStack>
             <ScrollView>
