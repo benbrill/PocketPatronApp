@@ -1,8 +1,10 @@
+import { computeAndUpdateBTForUser } from "@/lib/btAlgo";
 import { supabase } from "@/lib/supabase";
-import { useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useState } from "react";
 import { Pressable } from "react-native";
-import { Image, Separator, Text, XStack, YStack } from "tamagui";
+import { Button, Image, Separator, Text, XStack, YStack } from "tamagui";
+
 
 type Show = {
     show_id: number;
@@ -30,6 +32,8 @@ export default function ShowComparison() {
     const [currentPair, setCurrentPair] = useState<[Show, Show] | null>(null);
     const [comparisonHistory, setComparisonHistory] = useState<Set<ComparisonKey>>(new Set());
     const [matchups, setMatchups] = useState<{ winner_id: number; loser_id: number }[]>([])
+
+    const router = useRouter()
 
     const selectRandomPair = (data: Show[]) => {
         if (data.length < 2) return;
@@ -97,6 +101,32 @@ export default function ShowComparison() {
         selectRandomPair(userShows);
     }
 
+    const handleSubmit = async () => {
+        if (matchups.length === 0) return;
+        const user = await supabase.auth.getUser();
+        const userId = user.data.user?.id; 
+        const matchupsWithUserId = matchups.map((matchup) => ({
+            ...matchup,
+            user_id: userId,
+        }));
+        const { error } = await supabase.from("user_show_comparisons").insert(matchupsWithUserId);
+        if (error) {
+            console.error('Error saving matchups:', error);
+        } else {
+            console.log('Matchups saved successfully!');
+        }
+        // recalculated BT algoithm
+        computeAndUpdateBTForUser(userId!)
+            .then(() => {
+                console.log('BT scores updated successfully!');
+                router.push('/home')
+            })
+            .catch((error) => {
+                console.error('Error updating BT scores:', error);
+            });
+    };
+
+
 
     return (
         <YStack flex={1} alignItems="center" justifyContent="center">
@@ -112,6 +142,7 @@ export default function ShowComparison() {
             {currentPair && (
                 <ShowCard show={currentPair[1]} onPress={handleShowClick} />
             )}
+            <Button onPress={handleSubmit}>Submit Rankings</Button>
         </YStack>
     )
 }
@@ -131,8 +162,8 @@ const ShowCard: React.FC<ShowCardProps> = ({ show, onPress }) => {
                             
                         // }}
                         source={require('@/assets/images/2025_Death_Becomes_Her.png')}
-                        width={200}
-                        height={300}
+                        width={150}
+                        height={225}
                     />
                 <Text fontFamily="InstrumentSans_400Regular" fontSize={10}>{show.season}</Text>
                 <Text fontFamily="InstrumentSerif_400Regular" fontSize={30}>{show.title}</Text>

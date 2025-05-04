@@ -5,8 +5,7 @@ import { TamaguiProvider } from "@tamagui/core";
 import { useFonts } from "expo-font";
 import { Slot, SplashScreen } from "expo-router";
 import { useEffect } from "react";
-import { useColorScheme } from "react-native";
-import { PortalProvider } from "tamagui";
+import { PortalProvider, YStack } from "tamagui";
 import config from "../tamagui.config";
 
 export default function RootLayout() {
@@ -30,12 +29,14 @@ export default function RootLayout() {
 }
 
 function RootLayoutNav() {
-  const colorScheme = useColorScheme();
+  // const colorScheme = useColorScheme();
   return (
-    <TamaguiProvider config={config} defaultTheme={colorScheme as any}>
+    <TamaguiProvider config={config} defaultTheme="dark">
       <PortalProvider>
         <AuthProvider>
-          <Slot /> 
+          <YStack f={1} bg = "#141414">
+            <Slot /> 
+          </YStack>
         </AuthProvider>
       </PortalProvider>
     </TamaguiProvider>
