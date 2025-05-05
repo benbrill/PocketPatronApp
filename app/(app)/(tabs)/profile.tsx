@@ -1,4 +1,5 @@
 import RatingBadge from "@/components/RatingBadge";
+import { Screen } from "@/components/Screen";
 import { supabase } from "@/lib/supabase";
 import { Link } from "expo-router";
 import { useState } from "react";
@@ -43,6 +44,7 @@ export default function Profile() {
     }));
 
     return(
+        <Screen>
         <ScrollView>
             <YStack width="100%" height="100%" padding={20} gap={20}>
                 <Text fontSize={30} fontFamily="InstrumentSans_400Regular">Profile</Text>
@@ -69,5 +71,6 @@ export default function Profile() {
                     ))}
             </YStack>
         </ScrollView>
+        </Screen>
     )
 }

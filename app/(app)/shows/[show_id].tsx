@@ -1,12 +1,14 @@
 import AddViewingSheet from '@/components/ShowDetails';
 import { supabase } from '@/lib/supabase';
-import { Link, useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Button, Image, ScrollView, Text, XStack, YStack } from 'tamagui';
+
 
 export default function ShowDetails() {
     const [show, setShow] = useState<{ show_id: number; title: string; description: string, season: number, image_filename: string } | null>(null);
     const { show_id } = useLocalSearchParams();
+    const router = useRouter();
 
 
     async function fetchShowDetails(show_id: number) {
@@ -38,9 +40,7 @@ export default function ShowDetails() {
                 <YStack maxWidth={"50%"}>
                     <Text fontFamily="InstrumentSerif_400Regular" fontSize={30}>{show?.title}</Text>
                     <Text fontFamily="InstrumentSans_400Regular" fontSize={20}>{show?.season}</Text>
-                    <Link href={`/comparison/${show_id}`}>
-                        <Button>Compare</Button>
-                    </Link>
+                    <Button onPress={() => router.push(`/comparison/${show_id}`)}>Compare</Button>
                 </YStack>
             </XStack>
             <ScrollView>

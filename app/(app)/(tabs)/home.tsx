@@ -11,7 +11,7 @@ export default function Home() {
         gap="$2">
         <Text fontFamily="InstrumentSans_400Regular" fontSize={20}>Welcome to</Text>
         <Text fontFamily="InstrumentSerif_400Regular" fontSize={50}>PocketPatron</Text>
-        <Link href={"/profile"}>Profile</Link>
+        <Link href={"/create-profile"}>Profile</Link>
         <DisplayShows />
         </YStack>
         </Screen>
