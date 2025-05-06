@@ -20,7 +20,7 @@ export default function TabLayout() {
       >
         <Tabs.Screen name="home" options={{ title: 'Home',
           tabBarIcon: ({ color }) => <Ionicons name="home-outline" size={24} color="white" /> }} />
-        <Tabs.Screen name="friends" options={{ title: 'Friends', 
+        <Tabs.Screen name="friends" options={{ title: 'Community', 
           tabBarIcon: ({ color }) => <Ionicons name="people-outline" size={24} color="white" /> }} />
         <Tabs.Screen name="profile" options={{ title: 'Profile',
           tabBarIcon: ({ color }) => <Ionicons name="person-circle-outline" size={24} color="white" /> }} />

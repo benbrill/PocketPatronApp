@@ -36,7 +36,7 @@ export default function ShowComparison() {
     const router = useRouter()
 
     const selectRandomPair = (data: Show[]) => {
-        if (data.length < 2) return;
+        if (data.length < 2) return
 
         let show1 = data.find((show) => show.show_id === Number(show_id));
         if (!show1) {

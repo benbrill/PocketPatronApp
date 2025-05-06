@@ -1,16 +1,17 @@
 import { supabase } from '@/lib/supabase';
+import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import {
-    Button,
-    Form,
-    Input,
-    Label,
-    Sheet,
-    Text,
-    TextArea,
-    XStack,
-    YStack,
+  Button,
+  Form,
+  Input,
+  Label,
+  Sheet,
+  Text,
+  TextArea,
+  XStack,
+  YStack,
 } from 'tamagui';
   
 type FormValues = {
@@ -21,20 +22,20 @@ notes: string;
 async function addShow({ values, show_id }: { values: FormValues; show_id: number | undefined }) {
     const user = await supabase.auth.getUser();
     if (!user.data.user) {
-        console.error('User not found');
-        return;
+      console.error('User not found');
+      return;
     }
     const new_data = {...values, user_id: user.data.user?.id, show_id: show_id};
     console.log('Adding show:', new_data);
     const { data: shows, error: showError } = await supabase.from('user_shows').upsert(new_data).eq('user_id', user);
     if (showError) {
-        console.error('Error adding show:', showError);
+      console.error('Error adding show:', showError);
     } else {
-        console.log('Show added:', shows);
+      console.log('Show added:', shows);
     }
-}
-
-export default function AddViewingSheet({
+  }
+  
+  export default function AddViewingSheet({
     show,
   }: {
     show: {
@@ -46,7 +47,7 @@ export default function AddViewingSheet({
     } | null;
   }) {
     const [open, setOpen] = useState(false);
-  
+    
     const {
       control,
       handleSubmit,
@@ -57,14 +58,16 @@ export default function AddViewingSheet({
         notes: '',
       },
     });
-  
+    
+    const router = useRouter();
     const onSubmit = (values: FormValues) => {
       // TODO: send to Supabase
       addShow({ values, show_id: show?.show_id });
       reset();
       setOpen(false);
+      router.push(`/comparison/${show?.show_id}`);
     };
-  
+    
     return (
       <>
         {/* Button to trigger sheet */}
@@ -77,7 +80,7 @@ export default function AddViewingSheet({
           onOpenChange={setOpen}
           snapPoints={[50]}
           dismissOnSnapToBottom
-        >
+          >
           <Sheet.Overlay />
           <Sheet.Frame padding="$4" space="$4" backgroundColor="$background">
             <Sheet.Handle />
