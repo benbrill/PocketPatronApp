@@ -2,6 +2,7 @@ import { AuthProvider } from "@/components/ctx";
 import { InstrumentSans_400Regular, InstrumentSans_700Bold } from "@expo-google-fonts/instrument-sans";
 import { InstrumentSerif_400Regular } from "@expo-google-fonts/instrument-serif";
 import { TamaguiProvider } from "@tamagui/core";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useFonts } from "expo-font";
 import { Slot, SplashScreen } from "expo-router";
 import { useEffect } from "react";
@@ -28,15 +29,19 @@ export default function RootLayout() {
   return <RootLayoutNav />;
 }
 
+const queryClient = new QueryClient();
+
 function RootLayoutNav() {
   // const colorScheme = useColorScheme();
   return (
     <TamaguiProvider config={config} defaultTheme="dark">
       <PortalProvider>
         <AuthProvider>
-          <YStack f={1} bg = "#141414">
-            <Slot /> 
-          </YStack>
+          <QueryClientProvider client={queryClient}>
+            <YStack f={1} bg = "#141414">
+              <Slot /> 
+            </YStack>
+          </QueryClientProvider>
         </AuthProvider>
       </PortalProvider>
     </TamaguiProvider>

@@ -1,8 +1,9 @@
+import { useAuth } from "@/components/ctx";
 import RatingBadge from "@/components/RatingBadge";
 import { Screen } from "@/components/Screen";
 import { supabase } from "@/lib/supabase";
 import { Link } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Image, ScrollView, Text, XStack, YStack } from "tamagui";
 
 type Show = {
@@ -25,17 +26,21 @@ type Show = {
 export default function Profile() {
     const [shows, setShows] = useState<Show[]>([])
 
-    const getData = async () => {
-        const user = await supabase.auth.getUser()
-        const {data: shows} = await supabase.from("user_shows").select('*, shows(*)').eq('user_id', user.data.user?.id).order('score', {ascending: false});
-        return shows
-    }
+    const {session } = useAuth();
+    const userID = session?.user.id
 
-    getData().then((data) => {
-        if (data) {
-            setShows(data);
+    useEffect(() => {
+        const getData = async () => {
+            const {data: shows} = await supabase.from("user_shows").select('*, shows(*)').eq('user_id', userID).order('score', {ascending: false});
+            return shows
         }
-    });
+        getData().then((data) => {
+            if (data) {
+                setShows(data);
+            }
+        });
+    }, [userID]);
+
 
     const maxScore = Math.max(...shows.map((show) => show.score));
     const normalizedShows = shows.map((show) => ({
