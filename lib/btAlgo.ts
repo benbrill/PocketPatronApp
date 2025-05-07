@@ -51,10 +51,15 @@ export async function computeAndUpdateBTForUser(user_id: string) {
   }
 
   // 3. Upsert scores to user_show_scores
+  // Normalize scores using min-max normalization
+  const scoreValues = Object.values(scores);
+  const minScore = Math.min(...scoreValues);
+  const maxScore = Math.max(...scoreValues);
+
   const updates = Object.entries(scores).map(([show_id, bt_score]) => ({
     user_id: user_id,
     show_id: Number(show_id),
-    score: bt_score,
+    score: ((bt_score - minScore) / (maxScore - minScore || 1e-8)) * 10, // Normalize to a scale of 0 to 10
   }));
 
   const { error: updateError } = await supabase

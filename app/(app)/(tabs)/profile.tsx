@@ -2,9 +2,11 @@ import { useAuth } from "@/components/ctx";
 import RatingBadge from "@/components/RatingBadge";
 import { Screen } from "@/components/Screen";
 import { supabase } from "@/lib/supabase";
-import { Link } from "expo-router";
+import { useToastController } from '@tamagui/toast';
+import { Link, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { Image, ScrollView, Text, XStack, YStack } from "tamagui";
+
 
 type Show = {
     shows: {
@@ -25,7 +27,6 @@ type Show = {
 
 export default function Profile() {
     const [shows, setShows] = useState<Show[]>([])
-
     const {session } = useAuth();
     const userID = session?.user.id
 
@@ -41,6 +42,19 @@ export default function Profile() {
         });
     }, [userID]);
 
+    const toast = useToastController()
+    const { reason } = useLocalSearchParams()
+  
+    useEffect(() => {
+      // 🎯 Show toast if URL contains `reason`
+      if (reason === 'not-enough-shows') {
+        toast.show('You need at least two shows to start ranking.', {
+          duration: 4000,
+          variant: 'outline',
+        })
+      }
+    }, [reason])
+
 
     const maxScore = Math.max(...shows.map((show) => show.score));
     const normalizedShows = shows.map((show) => ({
@@ -53,7 +67,7 @@ export default function Profile() {
         <ScrollView>
             <YStack width="100%" height="100%" padding={20} gap={20}>
                 <Text fontSize={30} fontFamily="InstrumentSans_400Regular">Profile</Text>
-                    {normalizedShows?.map((show) => (
+                    {normalizedShows.length > 0 ? normalizedShows.map((show) => (
                         <XStack key={show.show_id} alignItems="center" justifyContent="center" gap={10}>
                             <Link href={`/shows/${show.show_id}`}>
                                 <Image
@@ -73,7 +87,8 @@ export default function Profile() {
                                 <Text fontSize={15} opacity={0.5}>{new Date(show.watched_at).toLocaleDateString('en-US', { year: '2-digit', month: '2-digit', day: '2-digit' })}</Text>
                             </YStack>
                         </XStack>
-                    ))}
+                    )): 
+                    <Text fontSize={20} fontFamily="InstrumentSans_400Regular">No shows found</Text>}
             </YStack>
         </ScrollView>
         </Screen>
