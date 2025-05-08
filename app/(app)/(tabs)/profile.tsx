@@ -2,8 +2,7 @@ import { useAuth } from "@/components/ctx";
 import RatingBadge from "@/components/RatingBadge";
 import { Screen } from "@/components/Screen";
 import { supabase } from "@/lib/supabase";
-import { useToastController } from '@tamagui/toast';
-import { Link, useLocalSearchParams } from "expo-router";
+import { Link } from "expo-router";
 import { useEffect, useState } from "react";
 import { Image, ScrollView, Text, XStack, YStack } from "tamagui";
 
@@ -42,18 +41,19 @@ export default function Profile() {
         });
     }, [userID]);
 
-    const toast = useToastController()
-    const { reason } = useLocalSearchParams()
+    // const toast = useToastController()
+    // const { reason } = useLocalSearchParams()
   
-    useEffect(() => {
-      // 🎯 Show toast if URL contains `reason`
-      if (reason === 'not-enough-shows') {
-        toast.show('You need at least two shows to start ranking.', {
-          duration: 4000,
-          variant: 'outline',
-        })
-      }
-    }, [reason])
+    // useEffect(() => {
+    //   // 🎯 Show toast if URL contains `reason`
+    //   if (reason === 'not-enough-shows') {
+    //     toast.show('You need at least two shows to start ranking.', {
+    //       duration: 4000,
+    //       variant: 'outline',
+    //     })
+    //   }
+    // }, [reason])
+
 
 
     const maxScore = Math.max(...shows.map((show) => show.score));

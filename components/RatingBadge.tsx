@@ -4,10 +4,12 @@ import { Text, YStack } from 'tamagui'
 type RatingCircleProps = {
   rating: number // 0 to 10
   size?: number  // default 80
+  fontSize?: number // default 18
+  strokeWidthInput?: number // default 8
 }
 
-export default function RatingCircle({ rating, size = 80 }: RatingCircleProps) {
-  const strokeWidth = 8
+export default function RatingCircle({ rating, size = 80, fontSize = 18, strokeWidthInput = 8 }: RatingCircleProps) {
+  const strokeWidth = strokeWidthInput
   const radius = (size - strokeWidth) / 2
   const circumference = 2 * Math.PI * radius
 
@@ -79,7 +81,7 @@ export default function RatingCircle({ rating, size = 80 }: RatingCircleProps) {
 
       <Text
         position="absolute"
-        fontSize={18}
+        fontSize={fontSize}
         fontWeight="bold"
         color={strokeColor}
       >

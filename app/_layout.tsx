@@ -2,7 +2,7 @@ import { AuthProvider } from "@/components/ctx";
 import { InstrumentSans_400Regular, InstrumentSans_700Bold } from "@expo-google-fonts/instrument-sans";
 import { InstrumentSerif_400Regular } from "@expo-google-fonts/instrument-serif";
 import { TamaguiProvider } from "@tamagui/core";
-import { ToastProvider } from '@tamagui/toast';
+// import { ToastProvider } from '@tamagui/toast';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useFonts } from "expo-font";
 import { Slot, SplashScreen } from "expo-router";
@@ -39,11 +39,11 @@ function RootLayoutNav() {
       <PortalProvider>
         <AuthProvider>
           <QueryClientProvider client={queryClient}>
-            <ToastProvider>
+            {/* <ToastProvider> */}
               <YStack f={1} bg = "#141414">
                 <Slot /> 
               </YStack>
-            </ToastProvider>
+            {/* </ToastProvider> */}
           </QueryClientProvider>
         </AuthProvider>
       </PortalProvider>

@@ -49,6 +49,14 @@ export default function Auth(reason: { reason: string | string[] }) {
       password,
     });
 
+    if (error) {
+      setError(error?.message || '');
+    } else {
+      setError('Please check your inbox for email verification! Once verified, please sign in.');
+    }
+    
+
+
     if (error) Alert.alert(error.message);
     if (!session) Alert.alert('Please check your inbox for email verification!');
     setLoading(false);
