@@ -58,7 +58,7 @@ export async function computeAndUpdateBTForUser(user_id: string) {
   const stdDev = Math.sqrt(variance);
   const maxScore = Math.max(...scoreValues);
 
-  const scale = maxScore > mean + stdDev ? 10 : 9.9;
+  const scale = maxScore > mean + stdDev ? 10 : 9.9
 
   const updates = Object.entries(scores).map(([show_id, bt_score]) => ({
     user_id: user_id,
