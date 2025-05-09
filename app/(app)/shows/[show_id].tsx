@@ -1,5 +1,6 @@
 import { useAuth } from '@/components/ctx';
 import RatingCircle from '@/components/RatingBadge';
+import { Screen } from '@/components/Screen';
 import AddViewingSheet from '@/components/ShowDetails';
 import { supabase } from '@/lib/supabase';
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -56,6 +57,7 @@ export default function ShowDetails() {
     }, []);
 
     return (
+        <Screen>
         <YStack flex={1} alignItems="center" justifyContent="center" gap="$2" margin="$3" padding="$2">
             <XStack gap={"$2"} margin={"$2"}>
                 <Image
@@ -106,5 +108,6 @@ export default function ShowDetails() {
                 </Text>
             </ScrollView>
         </YStack>
+        </Screen>
     );
 }

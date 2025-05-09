@@ -1,11 +1,11 @@
-import { useAuth } from '@/components/ctx';
-import { supabase } from '@/lib/supabase';
-import { Redirect, Slot } from 'expo-router';
-import { useEffect, useState } from 'react';
+import { useAuth } from '@/components/ctx'
+import { supabase } from '@/lib/supabase'
+import { Redirect, Slot, Stack } from 'expo-router'
+import { useEffect, useState } from 'react'
 
 export default function ProtectedLayout() {
-  const { session, loading: authLoading } = useAuth();
-  const [profileCreated, setProfileCreated] = useState<boolean | null>(null);
+  const { session, loading: authLoading } = useAuth()
+  const [profileCreated, setProfileCreated] = useState<boolean | null>(null)
 
   useEffect(() => {
     const checkUserProfile = async () => {
@@ -14,31 +14,37 @@ export default function ProtectedLayout() {
           .from('profiles')
           .select('*')
           .eq('user_id', session.user.id)
-          .single();
+          .single()
 
         if (error || !profile) {
-          setProfileCreated(false);
+          setProfileCreated(false)
         } else {
-          setProfileCreated(true);
+          setProfileCreated(true)
         }
       }
-    };
+    }
 
-    checkUserProfile();
-  }, [session]);
+    checkUserProfile()
+  }, [session])
 
-  if (authLoading || profileCreated === null) {
-    // You can return a loading indicator here if desired
-    return null;
-  }
+  if (authLoading || profileCreated === null) return null
+  if (!session) return <Redirect href="/?reason=timed-out" />
+  if (!profileCreated) return <Redirect href="/create-profile" />
 
-  if (!session) {
-    return <Redirect href="/?reason=timed-out" />;
-  }
-
-  if (!profileCreated) {
-    return <Redirect href="/create-profile" />;
-  }
-
-  return <Slot />;
+  return (
+    <Stack>
+      {/* Automatically adds back button if user navigates to shows/[show_id] */}
+      <Stack.Screen
+        name="shows/[show_id]"
+        options={{
+          headerStyle: { backgroundColor: '#000' },
+          headerTintColor: '#fff',
+          headerTitle: '',
+        }}
+      />
+      {/* All other screens default to no header */}
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Slot />
+    </Stack>
+  )
 }
