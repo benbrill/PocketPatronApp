@@ -29,23 +29,26 @@ export default function ShowDetails() {
     }
 
     async function getUserShowDetails(show_id: number) {
-        const { data, error } = await supabase.from('user_shows').select('*').eq('show_id', show_id).eq('user_id', userID).single();
-        if (error) {
-            console.error('Error fetching user show details:', error);
-        } else {
+        try {
+            const { data, error } = await supabase.from('user_shows').select('*').eq('show_id', show_id).eq('user_id', userID).single();
             setUserShow(data || null);
         }
-        const { data: communityData, error: communityError } = await supabase
-            .from('user_shows')
-            .select('score')
-            .eq('show_id', show_id);
+        catch (error) {
+            
+        }
 
-        if (communityError) {
-            console.error('Error fetching community scores:', communityError);
-        } else if (communityData) {
-            const scores = communityData.map((entry) => entry.score);
-            const averageScore = scores.reduce((a, b) => a + b, 0) / scores.length;
-            setCommunityAverage(averageScore);
+        try {
+            const { data: communityData, error: communityError } = await supabase
+                .from('user_shows')
+                .select('score')
+                .eq('show_id', show_id);
+            if (communityData) {
+                const scores = communityData.map((entry) => entry.score);
+                const averageScore = scores.reduce((a, b) => a + b, 0) / scores.length;
+                setCommunityAverage(averageScore);
+            } 
+        }
+        catch (error) {
         }
 
     }
@@ -55,7 +58,7 @@ export default function ShowDetails() {
             getUserShowDetails(Number(show_id));
         }
     }, []);
-
+    console.log(communityAverage)
     return (
         <Screen>
         <YStack flex={1} alignItems="center" justifyContent="center" gap="$2" margin="$3" padding="$2">
@@ -84,6 +87,8 @@ export default function ShowDetails() {
                             <Text fontFamily="InstrumentSans_400Regular" fontSize={15} textAlign='center'></Text>
                         </YStack>
                         )}
+                        {communityAverage === 0 ? (
+                        <>
                         <YStack gap="$1" padding="$2" alignItems="center" justifyContent="center" width={"33%"}>
                             <RatingCircle rating = {communityAverage} size = {45} fontSize = {15} strokeWidthInput={5}/>
                             <Text fontFamily="InstrumentSans_400Regular" fontSize={15} textAlign='center'>Community</Text>
@@ -92,6 +97,9 @@ export default function ShowDetails() {
                             <RatingCircle rating = {communityAverage} size = {45} fontSize = {15} strokeWidthInput={5}/>
                             <Text fontFamily="InstrumentSans_400Regular" fontSize={15} textAlign='center'>Friends</Text>
                         </YStack>
+                        </>
+                        ) : <></>
+                        }
                     </XStack>
                     <YStack borderTopColor={"white"} borderTopWidth={1} alignItems="center" justifyContent="center" width={"100%"}>
                         <XStack gap="$2" padding="$2" alignItems="center" justifyContent="center">

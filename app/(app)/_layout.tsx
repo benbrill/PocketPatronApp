@@ -37,7 +37,15 @@ export default function ProtectedLayout() {
       <Stack.Screen
         name="shows/[show_id]"
         options={{
-          headerStyle: { backgroundColor: '#000' },
+          headerTransparent: true,
+          headerTintColor: '#fff',
+          headerTitle: '',
+        }}
+      />
+      <Stack.Screen
+        name="comparison/[show_id]"
+        options={{
+          headerTransparent: true,
           headerTintColor: '#fff',
           headerTitle: '',
         }}

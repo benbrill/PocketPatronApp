@@ -17,7 +17,10 @@ export default function ShowCard({ show }: { show: Show }) {
     <Link href={`/shows/${show.show_id}`} asChild>
     <YStack width="33%" padding="$2">
         <Image
-        source={require('../assets/images/2025_Death_Becomes_Her.png')}
+        // source={require('../assets/images/2025_Death_Becomes_Her.png')} 
+        source={{
+            uri: `https://vygupxxkyumsyvqotetf.supabase.co/storage/v1/object/public/pocket-patron-covers/covers/${show.image_filename.slice(5,)}`,
+        }}
         width={100}
         height={150}
         />

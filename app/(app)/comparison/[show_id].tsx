@@ -1,3 +1,4 @@
+import { Screen } from "@/components/Screen";
 import { computeAndUpdateBTForUser } from "@/lib/btAlgo";
 import { supabase } from "@/lib/supabase";
 import { useLocalSearchParams, useRouter } from 'expo-router';
@@ -56,6 +57,8 @@ export default function ShowComparison() {
     load();
   }, []);
 
+  console.log("userShows", userShows);
+
   const selectRandomPair = (data: Show[]) => {
     const mainShow = data.find((s) => s.show_id === Number(show_id));
     if (!mainShow) return;
@@ -110,6 +113,7 @@ export default function ShowComparison() {
   if (loading) return null;
 
   return (
+    <Screen>
     <YStack flex={1} alignItems="center" justifyContent="center">
       {currentPair && (
         <>
@@ -127,6 +131,7 @@ export default function ShowComparison() {
 
       <Button onPress={handleSubmit}>Submit Rankings</Button>
     </YStack>
+    </Screen>
   );
 }
 

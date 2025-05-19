@@ -1,121 +1,130 @@
-import { useRouter } from 'expo-router';
-import React, { useState } from 'react';
-import { Alert, AppState, StyleSheet } from 'react-native';
-import { Button, Input, Text, View, YStack } from 'tamagui';
-import { supabase } from '../lib/supabase';
+import * as AuthSession from 'expo-auth-session'
+import { useRouter } from 'expo-router'
+import React, { useEffect, useState } from 'react'
+import { Alert, AppState, Image, StyleSheet } from 'react-native'
+import { Button, Input, Text, XStack, YStack } from 'tamagui'
+import { supabase } from '../lib/supabase'
 
-// Tells Supabase Auth to continuously refresh the session automatically if
-// the app is in the foreground. When this is added, you will continue to receive
-// `onAuthStateChange` events with the `TOKEN_REFRESHED` or `SIGNED_OUT` event
-// if the user's session is terminated. This should only be registered once.
+// Start Supabase session auto-refresh
 AppState.addEventListener('change', (state) => {
   if (state === 'active') {
-    supabase.auth.startAutoRefresh();
+    supabase.auth.startAutoRefresh()
   } else {
-    supabase.auth.stopAutoRefresh();
+    supabase.auth.stopAutoRefresh()
   }
-});
+})
 
-export default function Auth(reason: { reason: string | string[] }) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-  const router = useRouter();
+export default function Auth({ reason }: { reason: string | string[] }) {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
+  const router = useRouter()
+
+  const redirectUri = AuthSession.makeRedirectUri({
+    scheme: 'pocketpatron', // Match app.json
+  })
+
+  useEffect(() => {
+    const checkSession = async () => {
+      const { data } = await supabase.auth.getSession()
+      if (data.session) router.push('/home')
+    }
+    checkSession()
+  }, [])
+
   async function signInWithEmail() {
-    setLoading(true);
+    setLoading(true)
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
-    });
-    
-    setError(error?.message || '');
+    })
+    setError(error?.message || '')
 
-    if (data.session) {
-      // Redirect to the home page after successful sign-in
-      router.push('/home');
-    }
-
-    setLoading(false);
+    if (data.session) router.push('/home')
+    setLoading(false)
   }
 
   async function signUpWithEmail() {
-    setLoading(true);
-    const {
-      data: { session },
-      error,
-    } = await supabase.auth.signUp({
-      email,
-      password,
-    });
+    setLoading(true)
+    const { error } = await supabase.auth.signUp({ email, password })
 
     if (error) {
-      setError(error?.message || '');
+      setError(error.message)
     } else {
-      setError('Please check your inbox for email verification! Once verified, please sign in.');
+      Alert.alert('Please check your inbox for email verification.')
     }
-    
 
-
-    if (error) Alert.alert(error.message);
-    if (!session) Alert.alert('Please check your inbox for email verification!');
-    setLoading(false);
+    setLoading(false)
   }
 
+  async function signInWithGoogle() {
+    setLoading(true)
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: redirectUri,
+      },
+    })
+
+    if (error) {
+      setError(error.message)
+      setLoading(false)
+    }
+  }
 
   return (
-    <YStack  
-        width={300}
-        minHeight={250}
-        overflow="hidden"
-        gap="$2"
-        margin="$3"
-        padding="$2"
-    >
-      <View style={[styles.verticallySpaced, styles.mt20]}>
-        <Input
-          placeholder="Email"
-          onChangeText={(text) => setEmail(text)}
-          value={email}
-          autoCapitalize="none"
-        />
-      </View>
-      <View style={styles.verticallySpaced}>
-        <Input
-          onChangeText={(text) => setPassword(text)}
-          value={password}
-          secureTextEntry
-          placeholder="Password"
-          autoCapitalize="none"
-        />
-      </View>
-      <View>
-        {error ? <Text style={{ color: 'red' }}>{error}</Text> : null}
-      </View>
-      <View>
-        {reason.reason ? <Text style={{ color: 'red' }}>{reason.reason}</Text> : null}
-      </View>
-      <View style={[styles.verticallySpaced, styles.mt20]}>
-        <Button disabled={loading} onPress={() => signInWithEmail()} > Sign In </Button>
-      </View>
-      <View style={styles.verticallySpaced}>
-        <Button disabled={loading} onPress={() => signUpWithEmail()} > Sign up </Button>
-      </View>
+    <YStack width={300} minHeight={250} overflow="hidden" gap="$2" margin="$3" padding="$2">
+      <Input
+        placeholder="Email"
+        onChangeText={setEmail}
+        value={email}
+        autoCapitalize="none"
+      />
+
+      <Input
+        placeholder="Password"
+        onChangeText={setPassword}
+        value={password}
+        secureTextEntry
+        autoCapitalize="none"
+      />
+
+      {error ? <Text color="red">{error}</Text> : null}
+      {reason ? <Text color="red">{reason}</Text> : null}
+
+      <Button disabled={loading} onPress={signInWithEmail}>
+        Sign In
+      </Button>
+      <Button disabled={loading} onPress={signUpWithEmail}>
+        Sign Up
+      </Button>
+
+      <XStack mt="$2" gap="$2" alignItems="center" justifyContent="center">
+        <Button
+          theme="blue"
+          disabled={loading}
+          onPress={signInWithGoogle}
+          icon={
+            <Image
+              source={{ uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png' }}
+              style={{ width: 18, height: 18 }}
+            />
+          }
+        >
+          Continue with Google
+        </Button>
+      </XStack>
     </YStack>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
-  container: {
-    marginTop: 40,
-    padding: 12,
-  },
   verticallySpaced: {
-    paddingTop: 4,
-    paddingBottom: 4,
+    paddingVertical: 8,
     alignSelf: 'stretch',
   },
   mt20: {
     marginTop: 20,
   },
-});
+})

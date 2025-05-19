@@ -22,6 +22,8 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <Ionicons name="home-outline" size={24} color="white" /> }} />
         <Tabs.Screen name="friends" options={{ title: 'Community', 
           tabBarIcon: ({ color }) => <Ionicons name="people-outline" size={24} color="white" /> }} />
+        <Tabs.Screen name="explore" options={{ title: 'Explore', 
+          tabBarIcon: ({ color }) => <Ionicons name="search" size={24} color="white" /> }} />
         <Tabs.Screen name="profile" options={{ title: 'Profile',
           tabBarIcon: ({ color }) => <Ionicons name="person-circle-outline" size={24} color="white" /> }} />
       </Tabs>

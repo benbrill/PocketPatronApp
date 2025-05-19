@@ -77,6 +77,7 @@ export default function DisplayShows() {
         placeholder="Search shows..."
         value={query}
         onChangeText={handleSearch}
+        padding={'$2'}
         mb="$4"
       />
 

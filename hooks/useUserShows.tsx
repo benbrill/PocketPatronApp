@@ -2,22 +2,20 @@ import { useAuth } from '@/components/ctx';
 import { supabase } from '@/lib/supabase';
 import { useQuery } from '@tanstack/react-query';
 
-export function useUserProfile(userId?: string | null) {
 
+export function useUserShows() {
   const { session } = useAuth();
-  // If no userId is provided, use the session user ID
-  if (!userId) {
-    userId = session?.user.id;
-  }
+
   return useQuery({
-    queryKey: ['profile', userId],
-    enabled: !!userId,
+    queryKey: ['user_shows', session?.user.id],
     queryFn: async () => {
+      if (!session) return [];
+
       const { data, error } = await supabase
-        .from('profiles')
+        .from('user_shows')
         .select('*')
-        .eq('user_id', userId)
-        .single();
+        .eq('user_id', session.user.id);
+
       if (error) throw error;
       return data;
     },
