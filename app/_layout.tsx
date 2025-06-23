@@ -1,3 +1,5 @@
+import 'react-native-gesture-handler'; // MUST be the first import
+
 import { AuthProvider } from "@/components/ctx";
 import { InstrumentSans_400Regular, InstrumentSans_700Bold } from "@expo-google-fonts/instrument-sans";
 import { InstrumentSerif_400Regular } from "@expo-google-fonts/instrument-serif";
@@ -8,6 +10,8 @@ import { useFonts } from "expo-font";
 import { Slot, SplashScreen } from "expo-router";
 import { useEffect } from "react";
 import { PortalProvider, YStack, } from "tamagui";
+// index.js or App.js
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import config from "../tamagui.config";
 
 export default function RootLayout() {
@@ -39,11 +43,13 @@ function RootLayoutNav() {
       <PortalProvider>
         <AuthProvider>
           <QueryClientProvider client={queryClient}>
+            <GestureHandlerRootView style={{ flex: 1 }}>
             {/* <ToastProvider> */}
               <YStack f={1} bg = "#141414">
                 <Slot /> 
               </YStack>
             {/* </ToastProvider> */}
+            </GestureHandlerRootView>
           </QueryClientProvider>
         </AuthProvider>
       </PortalProvider>

@@ -1,6 +1,8 @@
 import Auth from "@/components/Auth";
 import { useLocalSearchParams } from "expo-router";
 import { View } from "react-native";
+import 'react-native-gesture-handler';
+// index.js or App.js
 import { Text } from "tamagui";
 
 export default function Home() {

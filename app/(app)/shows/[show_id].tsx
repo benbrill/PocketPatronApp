@@ -109,8 +109,8 @@ export default function ShowDetails() {
                     </YStack>
                 </YStack>
             </XStack>
+            <AddViewingSheet show={show}/>
             <ScrollView>
-                <AddViewingSheet show={show}/>
                 <Text fontFamily="InstrumentSans_400Regular" fontSize={15} padding="$2">
                     {show?.description}
                 </Text>
